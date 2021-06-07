@@ -1,0 +1,66 @@
+version: '3'
+services:
+  elasticsearch:
+    image: elasticsearch:01
+    container_name: elasticsearch
+    networks:
+      - sc-net
+    environment:
+      - discovery.type=single-node
+      - http.port=9200
+      - http.cors.enabled=true
+      # - http.cors.allow-origin=http://192.168.93.139:1358
+      - http.cors.allow-origin=*
+      # - http.cors.allow-origin=http://localhost:1358,http://127.0.0.1:1358
+      - http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
+      - http.cors.allow-credentials=true
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - ../data/elasticsearch/data:/usr/share/elasticsearch/data
+      - ../data/elasticsearch/logs:/user/share/elasticsearch/logs:rw
+    # - ../data/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    ports:
+      - 9200:9200
+    #mem_limit: 1024m
+    restart: always
+
+  # elasticsearch客户端
+  kibana:
+    image: kibana:7.9.0
+    container_name: kibana
+    networks:
+      - sc-net
+    ports:
+      - 5601:5601
+#    environment:
+#      SERVER_HOST: 0.0.0.0
+#      ELASTICSEARCH_URL: http://localhost:9200
+    depends_on:
+      - elasticsearch
+    #mem_limit: 512m
+    restart: always
+
+  logstash:
+    image: logstash:7.9.0
+    container_name: sc-logstash
+    networks:
+      - sc-net
+    environment:
+      - TZ=Asia/Shanghai
+
+    volumes:
+      - ./data/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf #挂载logstash的配置文件
+    #    depends_on:
+    #      - elasticsearch #kibana在elasticsearch启动之后再启动
+    links:
+      - elasticsearch:es #可以用es这个域名访问elasticsearch服务
+    ports:
+      - 4560:4560
+      - 4561:4561
+      - 4562:4562
+      - 4563:4563
+
+networks:
+  sc-net:
+    external: false

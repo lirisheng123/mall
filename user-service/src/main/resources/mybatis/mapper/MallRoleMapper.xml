@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.cloud.dao.MallRoleMapper">
+  <resultMap id="BaseResultMap" type="com.springboot.cloud.entity.MallRole">
+    <id column="role_id" jdbcType="BIGINT" property="roleId" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="role_info" jdbcType="VARCHAR" property="roleInfo" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_role
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="roleId" parameterType="com.springboot.cloud.dao.MallRoleMapper">
+    insert into mall_role ( role_name, role_info,
+      create_user,update_user)
+    values (#{roleName,jdbcType=VARCHAR}, #{roleInfo,jdbcType=VARCHAR},
+       #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.springboot.cloud.dao.MallRoleMapper">
+    update mall_role
+    set role_name = #{roleName,jdbcType=VARCHAR},
+      role_info = #{roleInfo,jdbcType=VARCHAR},
+      update_user = #{updateUser,jdbcType=INTEGER}
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select role_id, role_name, role_info, create_time, create_user, update_time, update_user
+    from mall_role
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select role_id, role_name, role_info, create_time, create_user, update_time, update_user
+    from mall_role
+  </select>
+</mapper>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.cloud.dao.MallUserAddressMapper">
+  <resultMap id="BaseResultMap" type="com.springboot.cloud.entity.MallUserAddress">
+    <id column="address_id" jdbcType="BIGINT" property="addressId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
+    <result column="default_flag" jdbcType="TINYINT" property="defaultFlag" />
+    <result column="province_name" jdbcType="VARCHAR" property="provinceName" />
+    <result column="city_name" jdbcType="VARCHAR" property="cityName" />
+    <result column="region_name" jdbcType="VARCHAR" property="regionName" />
+    <result column="detail_address" jdbcType="VARCHAR" property="detailAddress" />
+    <result column="area_code" jdbcType="VARCHAR" property="areaCode" />
+    <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_user_address
+    where address_id = #{addressId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.springboot.cloud.entity.MallUserAddress">
+    insert into mall_user_address (user_id, user_name,
+      user_phone, province_name, city_name, region_name, detail_address,
+       area_code,default_flag
+      )
+    values (#{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR},
+      #{userPhone,jdbcType=VARCHAR},  #{provinceName,jdbcType=VARCHAR},
+      #{cityName,jdbcType=VARCHAR}, #{regionName,jdbcType=VARCHAR}, #{detailAddress,jdbcType=VARCHAR},
+      #{areaCode,jdbcType=VARCHAR} ,#{defaultFlag,jdbcType=TINYINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.springboot.cloud.entity.MallUserAddress">
+    update mall_user_address
+    set
+      user_name = #{userName,jdbcType=VARCHAR},
+      user_phone = #{userPhone,jdbcType=VARCHAR},
+      province_name = #{provinceName,jdbcType=VARCHAR},
+      city_name = #{cityName,jdbcType=VARCHAR},
+      region_name = #{regionName,jdbcType=VARCHAR},
+      detail_address = #{detailAddress,jdbcType=VARCHAR},
+      area_code=#{areaCode,jdbcType=VARCHAR},
+      default_flag=#{defaultFlag,jdbcType=TINYINT}
+    where address_id = #{addressId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select address_id, user_id, user_name, user_phone, default_flag, province_name, city_name, 
+    region_name, detail_address,area_code, is_deleted, create_time, update_time
+    from mall_user_address
+    where address_id = #{addressId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select address_id, user_id, user_name, user_phone, default_flag, province_name, city_name, 
+    region_name, detail_address,area_code, is_deleted, create_time, update_time
+    from mall_user_address
+  </select>
+</mapper>

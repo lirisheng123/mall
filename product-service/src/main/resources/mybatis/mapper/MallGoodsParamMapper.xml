@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.cloud.dao.MallGoodsParamMapper">
+  <resultMap id="BaseResultMap" type="com.springboot.cloud.entity.MallGoodsParam">
+    <id column="goods_param_id" jdbcType="BIGINT" property="goodsParamId" />
+    <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
+    <result column="goods_param_name" jdbcType="VARCHAR" property="goodsParamName" />
+    <result column="goods_param_value" jdbcType="VARCHAR" property="goodsParamValue" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_goods_param
+    where goods_param_id = #{goodsParamId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.springboot.cloud.entity.MallGoodsParam">
+    insert into mall_goods_param (goods_id, goods_param_name,
+      goods_param_value, create_user,update_user)
+    values ( #{goodsId,jdbcType=BIGINT}, #{goodsParamName,jdbcType=VARCHAR},
+      #{goodsParamValue,jdbcType=VARCHAR}, #{createUser,jdbcType=INTEGER},#{updateUser,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.springboot.cloud.entity.MallGoodsParam">
+    update mall_goods_param
+    set
+      goods_param_value = #{goodsParamValue,jdbcType=VARCHAR},
+      update_user = #{updateUser,jdbcType=INTEGER}
+    where goods_param_id = #{goodsParamId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select goods_param_id, goods_id, goods_param_name, goods_param_value, create_user, 
+    create_time, update_user, update_time
+    from mall_goods_param
+    where goods_param_id = #{goodsParamId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select goods_param_id, goods_id, goods_param_name, goods_param_value, create_user, 
+    create_time, update_user, update_time
+    from mall_goods_param
+  </select>
+
+  <insert id ="insertList" parameterType="java.util.List" >
+    <!--<selectKey resultType ="java.lang.Integer" keyProperty= "id"-->
+    <!--order= "AFTER">-->
+    <!--SELECT LAST_INSERT_ID()-->
+    <!--</selectKey >-->
+    insert into mall_goods_param( goods_id, goods_param_name,
+    goods_param_value, create_user, update_user)
+    values
+    <foreach collection ="list" item="goodsParam" index= "index" separator =",">
+      (#{goodsParam.goodsId,jdbcType=BIGINT}, #{goodsParam.goodsParamName,jdbcType=VARCHAR},
+      #{goodsParam.goodsParamValue,jdbcType=VARCHAR}, #{goodsParam.createUser,jdbcType=INTEGER},
+      #{goodsParam.updateUser,jdbcType=INTEGER})
+    </foreach >
+  </insert >
+</mapper>

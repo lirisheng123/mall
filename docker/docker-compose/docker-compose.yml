@@ -1,0 +1,85 @@
+version: '3'
+services:
+  redis: 
+    image: redis:6.0-alpine
+    container_name: sc-redis
+    restart: always
+    networks:
+      - sc-net
+    ports:
+      - 6379:6379
+    volumes:
+      - ../data/redis/data:/data
+      - ./config/redis/redis.conf:/etc/redis/redis.conf
+    environment:
+      - TZ=Asia/Shanghai
+      - LANG=en_US.UTF-8
+    #env_file: .env
+    #容器启动加载的指定redis.conf,而不是默认无加载启动,注意:无这句话,就挂载文件就不成功
+    command: redis-server /etc/redis/redis.conf
+
+#  rabbitmq:
+#    image: rabbitmq:management-alpine
+#    container_name: sc-rabbitmq
+#    restart: always
+#    volumes:
+#      - ../data/rabbitmq:/var/lib/rabbitmq/mnesia
+#    networks:
+#      - sc-net
+#    ports:
+#      - 5672:5672
+#      - 15672:15672
+    #env_file: .env
+
+#  mysql:
+#    image: mysql:5.7
+#    container_name: sc-mysql
+#    restart: always
+#    networks:
+#      - sc-net
+#    ports:
+#      - 3306:3306
+#    volumes:
+#      - ../data/mysql:/var/lib/mysql
+#    environment:
+#      TZ: Asia/Shanghai
+#      MYSQL_ROOT_PASSWORD: root123
+
+  mysql:
+    image: mysql:8.0.22
+    container_name: sc-mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    restart: always
+    networks:
+      - sc-net
+    ports:
+      - 3306:3306
+    volumes:
+      - ../sql:/docker-entrypoint-initdb.d/
+      - ../data/mysql/data:/var/lib/mysql
+      - ../data/mysql/logs:/var/log/mysql
+      - ./config/mysql/conf:/etc/mysql/conf.d
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: "123456"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "123456"
+      MYSQL_DATABASE: "mall"
+
+#  mysql-init:
+#    image: mysql:5.7
+#    command: /init-db.sh
+#    networks:
+#      - sc-net
+#    volumes:
+#      - ../auth/db:/sql/auth
+#      - ../gateway/gateway-admin/src/main/db:/sql/gateway
+#      - ../sysadmin/db:/sql/sysadmin
+#      - ./init-db.sh:/init-db.sh
+#    environment:
+#      MYSQL_ROOT_PASSWORD: root123
+
+
+networks:
+  sc-net:
+    external: false

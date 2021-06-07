@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.cloud.dao.MallGoodsInfoMapper">
+  <resultMap id="BaseResultMap" type="com.springboot.cloud.entity.MallGoodsInfo">
+    <id column="goods_id" jdbcType="BIGINT" property="goodsId" />
+    <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+    <result column="goods_category_id" jdbcType="BIGINT" property="goodsCategoryId" />
+    <result column="goods_cover_img" jdbcType="VARCHAR" property="goodsCoverImg" />
+    <result column="goods_carousel" jdbcType="VARCHAR" property="goodsCarousel" />
+    <result column="original_price" jdbcType="DECIMAL" property="originalPrice" />
+    <result column="selling_price" jdbcType="DECIMAL" property="sellingPrice" />
+    <result column="stock_num" jdbcType="INTEGER" property="stockNum" />
+    <result column="selled_stock_num" jdbcType="INTEGER" property="selledStockNum" />
+    <result column="tag" jdbcType="VARCHAR" property="tag" />
+    <result column="goods_sell_status" jdbcType="TINYINT" property="goodsSellStatus" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="goods_detail_content" jdbcType="LONGVARCHAR" property="goodsDetailContent" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_goods_info
+    where goods_id = #{goodsId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="goodsId" parameterType="com.springboot.cloud.entity.MallGoodsInfo">
+    insert into mall_goods_info (goods_name, goods_category_id,
+      goods_cover_img, goods_carousel, original_price, 
+      selling_price, stock_num, selled_stock_num, 
+      tag, goods_sell_status, create_user, 
+     update_user, goods_detail_content)
+    values (#{goodsName,jdbcType=VARCHAR}, #{goodsCategoryId,jdbcType=BIGINT},
+      #{goodsCoverImg,jdbcType=VARCHAR}, #{goodsCarousel,jdbcType=VARCHAR}, #{originalPrice,jdbcType=INTEGER}, 
+      #{sellingPrice,jdbcType=INTEGER}, #{stockNum,jdbcType=INTEGER}, #{selledStockNum,jdbcType=INTEGER}, 
+      #{tag,jdbcType=VARCHAR}, #{goodsSellStatus,jdbcType=TINYINT}, #{createUser,jdbcType=INTEGER}, 
+      #{updateUser,jdbcType=INTEGER},#{goodsDetailContent,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.springboot.cloud.entity.MallGoodsInfo">
+    update mall_goods_info
+    set goods_name = #{goodsName,jdbcType=VARCHAR},
+      goods_category_id = #{goodsCategoryId,jdbcType=BIGINT},
+      goods_cover_img = #{goodsCoverImg,jdbcType=VARCHAR},
+      goods_carousel = #{goodsCarousel,jdbcType=VARCHAR},
+      original_price = #{originalPrice,jdbcType=INTEGER},
+      selling_price = #{sellingPrice,jdbcType=INTEGER},
+      stock_num = #{stockNum,jdbcType=INTEGER},
+      selled_stock_num = #{selledStockNum,jdbcType=INTEGER},
+      tag = #{tag,jdbcType=VARCHAR},
+      goods_sell_status = #{goodsSellStatus,jdbcType=TINYINT},
+      update_user = #{updateUser,jdbcType=INTEGER},
+      goods_detail_content = #{goodsDetailContent,jdbcType=LONGVARCHAR}
+    where goods_id = #{goodsId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select goods_id, goods_name, goods_category_id, goods_cover_img, goods_carousel, 
+    original_price, selling_price, stock_num, selled_stock_num, tag, goods_sell_status, 
+    create_user, create_time, update_user, update_time, goods_detail_content
+    from mall_goods_info
+    where goods_id = #{goodsId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select goods_id, goods_name, goods_category_id, goods_cover_img, goods_carousel, 
+    original_price, selling_price, stock_num, selled_stock_num, tag, goods_sell_status, 
+    create_user, create_time, update_user, update_time, goods_detail_content
+    from mall_goods_info
+  </select>
+
+  <select id="selectPageByManyCondition" resultMap="BaseResultMap">
+    select goods_id, goods_name, goods_category_id, goods_cover_img, goods_carousel,
+    original_price, selling_price, stock_num, selled_stock_num, tag, goods_sell_status,
+    create_user, create_time, update_user, update_time, goods_detail_content
+    from mall_goods_info
+    WHERE 1
+    <if test="goodsSellStatus != null">
+      AND goods_sell_status = #{goodsSellStatus}
+    </if>
+    <if test="goodsName != null">
+      AND goods_name like  CONCAT('%',#{goodsName},'%')
+    </if>
+    <if test="goodsId != null">
+      AND goods_id = #{goodsId}
+    </if>
+    <if test="goodsCategoryId != null">
+      AND goods_category_id = #{goodsCategoryId}
+    </if>
+  </select>
+
+
+  <update id="updateSellStatueByGoodsId"  parameterType="java.util.Map" >
+    update mall_goods_info
+    <set>
+      goods_sell_status = #{Status}
+      where goods_id in
+      <foreach collection="list" index="index" item="item" open="(" separator="," close=")" >
+        #{item}
+      </foreach>
+    </set>
+  </update>
+
+  <!--<delete id="deleteList"  parameterType="java.util.Map" >-->
+    <!--delete from mall_goods_info WHERE  goods_id IN-->
+      <!--<foreach collection="list" index="index" item="item" open="(" separator="," close=")" >-->
+        <!--#{item}-->
+      <!--</foreach>-->
+  <!--</delete>-->
+  <select id="searchTime" resultMap="BaseResultMap">
+    select mall_goods_info.goods_id, goods_name, goods_category_id, goods_cover_img, goods_carousel,
+      original_price, selling_price, stock_num, selled_stock_num, tag, goods_sell_status,
+      mall_goods_info.create_user, mall_goods_info.create_time, mall_goods_info.update_user, mall_goods_info.update_time, goods_detail_content
+    from mall_goods_info join mall_goods_grand on(mall_goods_info.goods_id=mall_goods_grand.goods_id)
+      join mall_goods_param on (mall_goods_info.goods_id= mall_goods_param.goods_id)
+    WHERE 1 AND mall_goods_grand.goods_grand_id = 1
+      AND mall_goods_info.goods_category_id = 24
+    <!--<if test="brandId != null">-->
+      <!--AND mall_goods_grand.goods_grand_id = #{brandId}-->
+    <!--</if>-->
+    <!--<if test="productCategoryId != null">-->
+      <!--&lt;!&ndash;AND mall_goods_info.goods_category_id like  CONCAT('%',#{goodsName},'%')&ndash;&gt;-->
+      <!--AND mall_goods_info.goods_category_id = #{productCategoryId}-->
+    <!--</if>-->
+    ORDER  BY  mall_goods_info.selling_price
+    <!--<if test="goodsId != null">-->
+      <!--AND goods_id = #{goodsId}-->
+    <!--</if>-->
+    <!--<if test="goodsCategoryId != null">-->
+      <!--AND goods_category_id = #{goodsCategoryId}-->
+    <!--</if>-->
+  </select>
+
+</mapper>

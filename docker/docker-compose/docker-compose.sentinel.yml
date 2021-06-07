@@ -1,0 +1,27 @@
+version: '3'
+services:
+  # The zipkin process services the UI, and also exposes a POST endpoint that
+  # instrumentation can send trace data to. Scribe is disabled by default.
+#  sentinel:
+#    image: cike/sentinel-dashboard-1.7.2
+#    image: bladex/sentinel-dashboard
+#    container_name: sc-sentinel
+#    networks:
+#      - sc-net
+#    ports:
+      # Port used for the Zipkin UI and HTTP Api
+#      - 8080:8080
+#      - 8858:8858
+  sentinel:
+    image: sentinel:01
+    container_name: sc-sentinel
+    networks:
+      - sc-net
+    ports:
+      - 8080:8080
+    #mem_limit: 1024m
+#    restart: always
+
+networks:
+   sc-net:
+     external: false

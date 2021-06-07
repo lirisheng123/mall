@@ -1,0 +1,60 @@
+spring:
+#  rabbitmq:
+#    host: ${RABBIT_MQ_HOST:localhost}
+#    port: ${RABBIT_MQ_PORT:5672}
+#    username: ${RABBIT_MQ_USERNAME:guest}
+#    password: ${RABBIT_MQ_PASSWORD:guest}
+#  redis:
+#    host: ${REDIS_HOST:localhost}
+#    port: ${REDIS_PORT:6379}
+#    ##password: ${REDIS_PASSWORD:}
+#  #spring boot admin的登陆账号和密码配置
+#  security:
+#    user:
+#      name: admin
+#      password: 123456
+#  #通过rabbit MQ将日志发给zipkin
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_POST:3306}/mallActivity?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+  zipkin:
+    base-url: ${ZIPKIN_HOST:localhost}:${ZIPKIN_POST:9411}
+  sleuth:
+    sampler:
+      probability: 1.0
+  sentinel:
+     transport:
+       dashboard: ${SENTINEL:localhost}:${SENTINEL_POST:8080}
+
+
+feing:
+  sentinel:
+    enable: true
+
+
+##日志相关配置
+logging:
+  level:
+    com.springboot.cloud.controller: DEBUG
+    #注意,这里是A服务调用B服务的接口权限名
+    com.springboot.cloud.service: DEBUG
+
+# 允许对给该服务进行监控
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+
+
+# 配置mybatis的mapper.xml以及mybatis配置文件地址
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.cloud.dao.MallUserMapper">
+  <resultMap id="BaseResultMap" type="com.springboot.cloud.entity.MallUser">
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="login_name" jdbcType="VARCHAR" property="loginName" />
+    <result column="password_md5" jdbcType="VARCHAR" property="passwordMd5" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
+    <result column="locked_flag" jdbcType="TINYINT" property="lockedFlag" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="userId" parameterType="com.springboot.cloud.entity.MallUser">
+    insert into mall_user (login_name, password_md5,
+      phone_number, locked_flag)
+    values (#{loginName,jdbcType=VARCHAR}, #{passwordMd5,jdbcType=VARCHAR},
+      #{phoneNumber,jdbcType=VARCHAR},#{lockedFlag,jdbcType=TINYINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.springboot.cloud.entity.MallUser">
+    update mall_user
+    set login_name = #{loginName,jdbcType=VARCHAR},
+      password_md5 = #{passwordMd5,jdbcType=VARCHAR},
+      phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      locked_flag=#{lockedFlag,jdbcType=TINYINT}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select user_id, login_name, password_md5, phone_number, is_deleted, locked_flag, 
+    create_time
+    from mall_user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select user_id, login_name, password_md5, phone_number, is_deleted, locked_flag, 
+    create_time
+    from mall_user
+  </select>
+
+  <select id="selectPageByManyCondition" resultMap="BaseResultMap">
+    select user_id, login_name, password_md5, phone_number, is_deleted, locked_flag,
+    create_time
+    from mall_user
+    WHERE  locked_flag = #{lockedFlag} AND is_deleted = #{isDeleted}
+    <if test="phoneNumber!= null">
+      AND phone_number like  CONCAT('%',#{phoneNumber},'%')
+    </if>
+    <if test="loginName!=null">
+      AND login_name like  CONCAT('%',#{loginName},'%')
+    </if>
+
+  </select>
+
+  <update id="updateLockStatusByUserId"  parameterType="java.util.Map" >
+    update mall_user
+    <set>
+      locked_flag = #{Status}
+      where user_id in
+      <foreach collection="list" index="index" item="item" open="(" separator="," close=")" >
+        #{item}
+      </foreach>
+    </set>
+  </update>
+</mapper>

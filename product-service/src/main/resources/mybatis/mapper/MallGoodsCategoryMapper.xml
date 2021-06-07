@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.cloud.dao.MallGoodsCategoryMapper">
+  <resultMap id="BaseResultMap" type="com.springboot.cloud.entity.MallGoodsCategory">
+    <id column="category_id" jdbcType="BIGINT" property="categoryId" />
+    <result column="category_level" jdbcType="TINYINT" property="categoryLevel" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="category_pic" jdbcType="VARCHAR" property="categoryPic" />
+    <result column="category_rank" jdbcType="INTEGER" property="categoryRank" />
+    <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+  </resultMap>
+  <resultMap id="listWithChildrenMap" type="com.springboot.cloud.dto.CategoryParentAndChird"
+             extends="com.springboot.cloud.dao.MallGoodsCategoryMapper.BaseResultMap">
+    <collection property="children" resultMap="com.springboot.cloud.dao.MallGoodsCategoryMapper.BaseResultMap"
+                columnPrefix="child_"></collection>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_goods_category
+    where category_id = #{categoryId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert"   useGeneratedKeys="true" keyProperty="categoryId" parameterType="com.springboot.cloud.entity.MallGoodsCategory">
+    insert into mall_goods_category ( category_level, parent_id,
+      category_name,category_pic, category_rank, is_deleted,
+      create_user,update_user)
+    values ( #{categoryLevel,jdbcType=TINYINT}, #{parentId,jdbcType=BIGINT},
+      #{categoryName,jdbcType=VARCHAR},#{categoryPic,jdbcType=VARCHAR}, #{categoryRank,jdbcType=INTEGER}, #{isDeleted,jdbcType=TINYINT},
+     #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.springboot.cloud.entity.MallGoodsCategory">
+    update mall_goods_category
+    set
+      parent_id = #{parentId,jdbcType=BIGINT},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      category_pic=#{categoryPic,jdbcType=VARCHAR},
+      category_rank = #{categoryRank,jdbcType=INTEGER},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      update_user = #{updateUser,jdbcType=INTEGER}
+    where category_id = #{categoryId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select category_id, category_level, parent_id, category_name,category_pic, category_rank, is_deleted,
+    create_time, create_user, update_time, update_user
+    from mall_goods_category
+    where category_id = #{categoryId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select category_id, category_level, parent_id, category_name,category_pic, category_rank, is_deleted,
+    create_time, create_user, update_time, update_user
+    from mall_goods_category
+  </select>
+  <select id="listWithChildren" resultMap="listWithChildrenMap">
+        select
+            c1.category_id,
+            c1.category_name,
+            c1.category_pic,
+            c2.category_id   child_category_id,
+            c2.category_name child_category_name,
+            c2.category_pic child_category_pic
+        from  mall_goods_category c1 left join  mall_goods_category c2 on c1.category_id = c2.parent_id
+        where c1.parent_id = 0
+    </select>
+</mapper>

@@ -1,0 +1,20 @@
+version: '3'
+services:
+  #监控管理台服务
+  recommend-service:
+    image: cike/recommend-service:0.0.1-SNAPSHOT
+    container_name: sc-recommend-service
+#    restart: always
+    networks:
+      - sc-net
+    ports:
+      - 8089:8089
+    #指定monitor运行时在yml文件中的nacos的地址
+    env_file: .env
+    environment:
+      TZ: Asia/Shanghai
+
+
+networks:
+  sc-net:
+    external: false

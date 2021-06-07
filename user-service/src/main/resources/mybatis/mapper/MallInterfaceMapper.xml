@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.cloud.dao.MallInterfaceMapper">
+  <resultMap id="BaseResultMap" type="com.springboot.cloud.entity.MallInterface">
+    <id column="inter_id" jdbcType="BIGINT" property="interId" />
+    <result column="inter_name" jdbcType="VARCHAR" property="interName" />
+    <result column="inter_info" jdbcType="VARCHAR" property="interInfo" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_interface
+    where inter_id = #{interId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.springboot.cloud.dao.MallInterfaceMapper">
+    insert into mall_interface (inter_name, inter_info,
+    create_user,update_user)
+    values (#{interName,jdbcType=VARCHAR}, #{interInfo,jdbcType=VARCHAR},
+      #{createUser,jdbcType=INTEGER},#{updateUser,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.springboot.cloud.dao.MallInterfaceMapper">
+    update mall_interface
+    set inter_name = #{interName,jdbcType=VARCHAR},
+      inter_info = #{interInfo,jdbcType=VARCHAR},
+      update_user = #{updateUser,jdbcType=INTEGER}
+    where inter_id = #{interId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select inter_id, inter_name, inter_info, create_time, create_user, update_time, update_user
+    from mall_interface
+    where inter_id = #{interId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select inter_id, inter_name, inter_info, create_time, create_user, update_time, update_user
+    from mall_interface
+  </select>
+</mapper>

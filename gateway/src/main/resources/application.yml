@@ -1,0 +1,82 @@
+spring:
+#  rabbitmq:
+#    host: ${RABBIT_MQ_HOST:localhost}
+#    port: ${RABBIT_MQ_PORT:5672}
+#    username: ${RABBIT_MQ_USERNAME:guest}
+#    password: ${RABBIT_MQ_PASSWORD:guest}
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:123456}
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_POST:3306}/mall?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+  zipkin:
+    base-url: http://${ZIPKIN_HOST:localhost}:${ZIPKIN_POST:9411}
+  sleuth:
+    sampler:
+      probability: 1.0
+  sentinel:
+    transport:
+      dashboard: ${SENTINEL:localhost}:${SENTINEL_POST:8080}
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: 'http://localhost:9401/rsa/publicKey' #配置RSA的公钥访问地址
+
+#请求和响应GZIP压缩支持
+feing:
+  sentinel:
+    enable: true
+  hystrix:
+    enabled: true #在Feign中开启Hystrix
+
+
+secure:
+  ignore:
+    urls: #配置白名单路径
+      - "/actuator/**"
+      - "/auth/oauth/token"
+      - "/auth/register"
+      #  游客的访问进行放行
+      - "/tourist/**"
+      - "/oauth/**"
+      - "/userService/**"
+      - "/productService/**"
+      - "/orderService/**"
+      - "/activityService/**"
+      - "/searchService/**"
+      - "/secondService/**"
+      - "/recommendService/**"
+##日志相关配置
+logging:
+  level:
+    org.springframework.security: DEBUG
+    com.springboot.cloud.service: DEBUG
+    com.springboot.cloud.authorization: DEBUG
+#  path: logs/
+#  file:
+#    max-size: 1GB
+#    - admin-client.log #添加开启admin的日志监控
+
+
+# 允许对给该服务进行监控
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+
+
+
+

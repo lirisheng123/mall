@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.cloud.dao.MallCouponHistoryMapper">
+  <resultMap id="BaseResultMap" type="com.springboot.cloud.entity.MallCouponHistory">
+    <id column="coupon_history_id" jdbcType="BIGINT" property="couponHistoryId" />
+    <result column="coupon_id" jdbcType="BIGINT" property="couponId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="member_nickname" jdbcType="VARCHAR" property="memberNickname" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="use_status" jdbcType="INTEGER" property="useStatus" />
+    <result column="use_time" jdbcType="TIMESTAMP" property="useTime" />
+    <result column="order_sn" jdbcType="VARCHAR" property="orderSn" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_coupon_history
+    where coupon_history_id = #{couponHistoryId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.springboot.cloud.entity.MallCouponHistory">
+    insert into mall_coupon_history ( coupon_id, user_id,  member_nickname,use_status )
+    values (#{couponId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
+      #{memberNickname,jdbcType=VARCHAR},#{useStatus,jdbcType=INTEGER} )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.springboot.cloud.entity.MallCouponHistory">
+    update mall_coupon_history
+    set coupon_id = #{couponId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      order_id = #{orderId,jdbcType=BIGINT},
+      member_nickname = #{memberNickname,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      use_status = #{useStatus,jdbcType=INTEGER},
+      use_time = #{useTime,jdbcType=TIMESTAMP},
+      order_sn = #{orderSn,jdbcType=VARCHAR}
+    where coupon_history_id = #{couponHistoryId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select coupon_history_id, coupon_id, user_id, order_id, member_nickname, create_time, 
+    use_status, use_time, order_sn
+    from mall_coupon_history
+    where coupon_history_id = #{couponHistoryId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select coupon_history_id, coupon_id, user_id, order_id, member_nickname, create_time, 
+    use_status, use_time, order_sn
+    from mall_coupon_history
+  </select>
+
+  <select id="getCouponList" resultMap="com.springboot.cloud.dao.MallCouponMapper.BaseResultMap">
+    SELECT
+    c.*
+    FROM
+    mall_coupon_history ch
+    LEFT JOIN mall_coupon c ON ch.coupon_id = c.mall_coupon_id
+    WHERE ch.user_id = #{userId}
+    <if test="useStatus!=null and useStatus!=2">
+      AND ch.use_status = #{useStatus}
+      AND NOW() > c.start_time
+      AND c.end_time > NOW()
+    </if>
+    <if test="useStatus!=null and useStatus==2">
+      AND NOW() > c.end_time
+    </if>
+  </select>
+
+  <update id="updateExceedEndTimeStatus"  parameterType="java.lang.Long">
+    update  mall_coupon_history SET  use_status=2 WHERE  user_id=#{userId}
+
+  </update>
+</mapper>

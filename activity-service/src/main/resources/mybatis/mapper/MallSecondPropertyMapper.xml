@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.cloud.dao.MallSecondPropertyMapper">
+  <resultMap id="BaseResultMap" type="com.springboot.cloud.entity.MallSecondProperty">
+    <id column="mall_second_property_id" jdbcType="BIGINT" property="mallSecondPropertyId" />
+    <result column="mall_flash_promotion_id" jdbcType="BIGINT" property="mallFlashPromotionId" />
+    <result column="goods_property_id" jdbcType="BIGINT" property="goodsPropertyId" />
+    <result column="property_name" jdbcType="VARCHAR" property="propertyName" />
+
+    <result column="property_selling_price" jdbcType="DECIMAL" property="propertySellingPrice" />
+    <result column="property_price" jdbcType="DECIMAL" property="propertyPrice" />
+    <result column="property_count" jdbcType="INTEGER" property="propertyCount" />
+    <result column="property_selled_count" jdbcType="INTEGER" property="propertySelledCount" />
+    <result column="limit" jdbcType="INTEGER" property="limit" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_second_property
+    where mall_second_property_id = #{mallSecondPropertyId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="mallSecondPropertyId" parameterType="com.springboot.cloud.entity.MallSecondProperty">
+    insert into mall_second_property ( mall_flash_promotion_id,
+      goods_property_id, property_selling_price, property_price, 
+      property_count, property_selled_count, `limit`,property_name
+      )
+    values (#{mallFlashPromotionId,jdbcType=BIGINT},
+      #{goodsPropertyId,jdbcType=BIGINT}, #{propertySellingPrice,jdbcType=DECIMAL}, #{propertyPrice,jdbcType=DECIMAL}, 
+      #{propertyCount,jdbcType=INTEGER}, #{propertySelledCount,jdbcType=INTEGER}, #{limit,jdbcType=INTEGER},
+      #{propertyName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.springboot.cloud.entity.MallSecondProperty">
+    update mall_second_property
+    set mall_flash_promotion_id = #{mallFlashPromotionId,jdbcType=BIGINT},
+      goods_property_id = #{goodsPropertyId,jdbcType=BIGINT},
+      property_selling_price = #{propertySellingPrice,jdbcType=DECIMAL},
+      property_price = #{propertyPrice,jdbcType=DECIMAL},
+      property_count = #{propertyCount,jdbcType=INTEGER},
+      property_selled_count = #{propertySelledCount,jdbcType=INTEGER},
+      `limit` = #{limit,jdbcType=INTEGER},
+      property_name=#{propertyName,jdbcType=VARCHAR}
+    where mall_second_property_id = #{mallSecondPropertyId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select mall_second_property_id, mall_flash_promotion_id, goods_property_id, property_selling_price, 
+    property_price, property_count, property_selled_count, `limit`,property_name
+    from mall_second_property
+    where mall_second_property_id = #{mallSecondPropertyId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select mall_second_property_id, mall_flash_promotion_id, goods_property_id, property_selling_price, 
+    property_price, property_count, property_selled_count, `limit`,property_name
+    from mall_second_property
+  </select>
+</mapper>

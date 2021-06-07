@@ -1,0 +1,13 @@
+server:
+  port: ${SERVER_PORT:9301}
+spring:
+  application:
+    name: monitor
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${REGISTER_HOST:localhost}:${REGISTER_PORT:8848}
+        ip: ${LOCAL_IP_ADDRESS:169.254.211.213}
+      config:
+        server-addr: ${REGISTER_HOST:localhost}:${REGISTER_PORT:8848}
+        file-extension: yml

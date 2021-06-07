@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.cloud.dao.MallGoodsPropertyRelateMapper">
+  <resultMap id="BaseResultMap" type="com.springboot.cloud.entity.MallGoodsPropertyRelate">
+    <id column="goods_property_relate_id" jdbcType="BIGINT" property="goodsPropertyRelateId" />
+    <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
+    <result column="category_property_id" jdbcType="BIGINT" property="categoryPropertyId" />
+    <result column="goods_property_relate_name" jdbcType="VARCHAR" property="goodsPropertyRelateName" />
+    <result column="goods_property_relate_value" jdbcType="VARCHAR" property="goodsPropertyRelateValue" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_goods_property_relate
+    where goods_property_relate_id = #{goodsPropertyRelateId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.springboot.cloud.entity.MallGoodsPropertyRelate">
+    insert into mall_goods_property_relate (goods_property_relate_id, goods_id, category_property_id,
+      goods_property_relate_name, goods_property_relate_value
+      )
+    values (#{goodsPropertyRelateId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{categoryPropertyId,jdbcType=BIGINT},
+      #{goodsPropertyRelateName,jdbcType=VARCHAR}, #{goodsPropertyRelateValue,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.springboot.cloud.entity.MallGoodsPropertyRelate">
+    update mall_goods_property_relate
+    set goods_id = #{goodsId,jdbcType=BIGINT},
+      category_property_id = #{goodsPropertyId,jdbcType=BIGINT},
+      goods_property_relate_name = #{goodsPropertyRelateName,jdbcType=VARCHAR},
+      goods_property_relate_value = #{goodsPropertyRelateValue,jdbcType=VARCHAR}
+    where goods_property_relate_id = #{goodsPropertyRelateId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select goods_property_relate_id, goods_id, category_property_id, goods_property_relate_name,
+    goods_property_relate_value
+    from mall_goods_property_relate
+    where goods_property_relate_id = #{goodsPropertyRelateId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select goods_property_relate_id, goods_id, category_property_id, goods_property_relate_name,
+    goods_property_relate_value
+    from mall_goods_property_relate
+  </select>
+
+  <insert id ="insertAll" parameterType="java.util.List" >
+    <!--<selectKey resultType ="java.lang.Integer" keyProperty= "id"-->
+    <!--order= "AFTER">-->
+    <!--SELECT LAST_INSERT_ID()-->
+    <!--</selectKey >-->
+    insert into mall_goods_property_relate (goods_id, category_property_id,
+    goods_property_relate_name, goods_property_relate_value)
+    values
+    <foreach collection ="list" item="categoryGrand" index= "index" separator =",">
+      (#{categoryGrand.goodsId,jdbcType=BIGINT}, #{categoryGrand.categoryPropertyId,jdbcType=BIGINT},
+      #{categoryGrand.goodsPropertyRelateName,jdbcType=VARCHAR},#{categoryGrand.goodsPropertyRelateValue,jdbcType=VARCHAR})
+    </foreach >
+  </insert >
+</mapper>

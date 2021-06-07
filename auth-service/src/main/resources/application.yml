@@ -1,0 +1,65 @@
+server:
+  port: 9401
+spring:
+  profiles:
+    active: dev
+  application:
+    name: auth-service
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_POST:3306}/mallUser?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${REGISTER_HOST:localhost}:${REGISTER_PORT:8848}
+        ip: ${LOCAL_IP_ADDRESS:169.254.211.213}
+    sentinel:
+      transport:
+        dashboard: ${SENTINEL_DASHBOARD_HOST:localhost}:${SENTINEL_DASHBOARD_PORT:8080}
+      datasource:
+        # 名称随意
+        flow:
+          nacos:
+            server-addr: ${REGISTER_HOST:localhost}:${REGISTER_PORT:8848}
+            dataId: ${spring.application.name}-flow-rules
+            groupId: SENTINEL_GROUP
+            # 规则类型，取值见：
+            # org.springframework.cloud.alibaba.sentinel.datasource.RuleType
+            rule-type: flow
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:123456}
+#  zipkin:
+#    base-url: http://${ZIPKIN_HOST:localhost}:${ZIPKIN_POST:9411}
+#  sleuth:
+#    sampler:
+#      probability: 1.0 #设置Sleuth的抽样收集概率
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+
+#请求和响应GZIP压缩支持
+feing:
+  sentinel:
+    enable: true
+  hystrix:
+    enabled: true #在Feign中开启Hystrix
+
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    com.macro.cloud.service: DEBUG
+    com.macro.cloud.config: DEBUG
+    com.macro.cloud.controller: DEBUG
+    com.macro.cloud.exception: DEBUG

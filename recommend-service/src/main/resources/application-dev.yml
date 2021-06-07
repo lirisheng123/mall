@@ -1,0 +1,58 @@
+spring:
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/mallProduct?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+#    username: root
+#    password: 123456
+#    druid:
+#      initial-size: 5 #连接池初始化大小
+#      min-idle: 10 #最小空闲连接数
+#      max-active: 20 #最大连接数
+#      web-stat-filter:
+#        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*" #不统计这些请求数据
+#      stat-view-servlet: #访问监控网页的登录用户名和密码
+#        login-username: druid
+#        login-password: druid
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_POST:3306}/mallProduct?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${REGISTER_HOST:localhost}:${REGISTER_PORT:8848}
+        ip: ${LOCAL_IP_ADDRESS:169.254.211.213}
+    sentinel:
+      transport:
+        dashboard: ${SENTINEL_DASHBOARD_HOST:localhost}:${SENTINEL_DASHBOARD_PORT:8080}
+      datasource:
+        # 名称随意
+        flow:
+          nacos:
+            server-addr: ${REGISTER_HOST:localhost}:${REGISTER_PORT:8848}
+            dataId: ${spring.application.name}-flow-rules
+            groupId: SENTINEL_GROUP
+            # 规则类型，取值见：
+            # org.springframework.cloud.alibaba.sentinel.datasource.RuleType
+            rule-type: flow
+
+# 开放监控
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+#支持feign
+feing:
+  sentinel:
+    enable: true
+
+
+logging:
+  level:
+    com.springboot.cloud.controller: DEBUG
+    com.springboot.cloud.service: DEBUG
+
+#logstash:
+#  host: localhost

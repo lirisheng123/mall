@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.cloud.dao.MallGrandMapper">
+  <!--<resultMap id="BaseResultMap" type="com.springboot.cloud.entity.MallGrand">-->
+    <!--<id column="grand_id" jdbcType="BIGINT" property="grandId" />-->
+    <!--<result column="grand_name" jdbcType="VARCHAR" property="grandName" />-->
+    <!--<result column="grand_info" jdbcType="VARCHAR" property="grandInfo" />-->
+    <!--<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />-->
+    <!--<result column="create_user" jdbcType="INTEGER" property="createUser" />-->
+    <!--<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />-->
+    <!--<result column="update_user" jdbcType="INTEGER" property="updateUser" />-->
+  <!--</resultMap>-->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_grand
+    where grand_id = #{grandId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.springboot.cloud.entity.MallGrand">
+    insert into mall_grand (grand_name, grand_info,
+      create_user, update_user)
+    values (#{grandName,jdbcType=VARCHAR}, #{grandInfo,jdbcType=VARCHAR},
+      #{createUser,jdbcType=INTEGER},#{updateUser,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.springboot.cloud.entity.MallGrand">
+    update mall_grand
+    set grand_name = #{grandName,jdbcType=VARCHAR},
+      grand_info = #{grandInfo,jdbcType=VARCHAR},
+      update_user = #{updateUser,jdbcType=INTEGER}
+    where grand_id = #{grandId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="com.springboot.cloud.entity.MallGrand">
+    select grand_id, grand_name, grand_info, create_time, create_user, update_time, update_user
+    from mall_grand
+    where grand_id = #{grandId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultType="com.springboot.cloud.entity.MallGrand">
+    select grand_id, grand_name, grand_info, create_time, create_user, update_time, update_user
+    from mall_grand
+  </select>
+
+  <select id="selectByNamePage" resultType="com.springboot.cloud.entity.MallGrand">
+    select grand_id, grand_name, grand_info, create_time, create_user, update_time, update_user
+    from mall_grand
+    WHERE 1
+    <if test="grandName!=null">
+      AND grand_name like CONCAT('%',#{grandName},'%')
+    </if>
+    <if test="grandInfo!=null">
+      AND grand_info like CONCAT('%',#{grandInfo},'%')
+    </if>
+    <if test="grandId != null">
+      AND grand_id = #{grandId}
+    </if>
+    Order BY  create_time desc
+  </select>
+</mapper>

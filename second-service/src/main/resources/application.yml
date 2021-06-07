@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: second-service
+  profiles:
+    active: dev #默认为开发环境
+
+server:
+  port: 8088
+
+
+
+
+
+

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.cloud.dao.MallShoppingCartItemMapper">
+  <resultMap id="BaseResultMap" type="com.springboot.cloud.entity.MallShoppingCartItem">
+    <id column="cart_item_id" jdbcType="BIGINT" property="cartItemId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="goods_property_id" jdbcType="BIGINT" property="goodsPropertyId" />
+    <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+    <result column="goods_info" jdbcType="VARCHAR" property="goodsInfo" />
+    <result column="goods_cover_img" jdbcType="VARCHAR" property="goodsCoverImg" />
+    <result column="goods_count" jdbcType="INTEGER" property="goodsCount" />
+    <result column="goods_price" jdbcType="DECIMAL" property="goodsPrice" />
+    <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_shopping_cart_item
+    where cart_item_id = #{cartItemId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.springboot.cloud.entity.MallShoppingCartItem">
+    insert into mall_shopping_cart_item (user_id, goods_property_id,goods_name,goods_cover_img,
+      goods_info, goods_count, goods_price)
+    values (#{userId,jdbcType=BIGINT}, #{goodsPropertyId,jdbcType=BIGINT},
+            #{goodsName,jdbcType=VARCHAR},#{goodsCoverImg,jdbcType=VARCHAR},
+      #{goodsInfo,jdbcType=VARCHAR}, #{goodsCount,jdbcType=INTEGER}, #{goodsPrice,jdbcType=DECIMAL})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.springboot.cloud.entity.MallShoppingCartItem">
+    update mall_shopping_cart_item
+    set user_id = #{userId,jdbcType=BIGINT},
+      goods_property_id = #{goodsId,jdbcType=BIGINT},
+      goods_name=#{goodsName,jdbcType=VARCHAR},
+      goods_info = #{goodsInfo,jdbcType=VARCHAR},
+      goods_cover_img=#{goodsCoverImg,jdbcType=VARCHAR},
+      goods_count = #{goodsCount,jdbcType=INTEGER},
+      goods_price = #{goodsPrice,jdbcType=DECIMAL},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where cart_item_id = #{cartItemId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select cart_item_id, user_id, goods_property_id,goods_name, goods_info,goods_cover_img, goods_count, goods_price, is_deleted,
+    create_time, update_time
+    from mall_shopping_cart_item
+    where cart_item_id = #{cartItemId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select cart_item_id, user_id, goods_property_id,goods_name, goods_info, goods_cover_img,goods_count, goods_price, is_deleted,
+    create_time, update_time
+    from mall_shopping_cart_item
+  </select>
+
+  <update id="updateIsDeleteListByPrimary"  parameterType="java.util.Map" >
+    update mall_shopping_cart_item
+    <set>
+      is_deleted = #{isDeleted}
+      where user_id = #{userId} AND cart_item_id in
+      <foreach collection="list" index="index" item="item" open="(" separator="," close=")" >
+        #{item}
+      </foreach>
+    </set>
+  </update>
+
+  <select id="getListByCartIds" resultMap="BaseResultMap">
+    SELECT
+     *
+    from mall_shopping_cart_item
+    WHERE cart_item_id in
+    <foreach collection="cateIds" item="id" open="(" close=")"
+             separator=",">
+      #{id}
+    </foreach>
+  </select>
+
+</mapper>

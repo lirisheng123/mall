@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.cloud.dao.MallOrderItemMapper">
+  <resultMap id="BaseResultMap" type="com.springboot.cloud.entity.MallOrderItem">
+    <id column="order_item_id" jdbcType="BIGINT" property="orderItemId" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="goods_property_id" jdbcType="BIGINT" property="goodsPropertyId" />
+    <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+    <result column="goods_info" jdbcType="VARCHAR" property="goodsInfo" />
+    <result column="goods_cover_img" jdbcType="VARCHAR" property="goodsCoverImg" />
+    <result column="selling_price" jdbcType="DECIMAL" property="sellingPrice" />
+    <result column="goods_count" jdbcType="INTEGER" property="goodsCount" />
+    <result column="goods_total_price" jdbcType="DECIMAL" property="goodsTotalPrice" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_order_item
+    where order_item_id = #{orderItemId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.springboot.cloud.entity.MallOrderItem">
+    insert into mall_order_item (order_item_id, order_id, goods_property_id, 
+      goods_name, goods_info, goods_cover_img, 
+      selling_price, goods_count, goods_total_price)
+    values (#{orderItemId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{goodsPropertyId,jdbcType=BIGINT}, 
+      #{goodsName,jdbcType=VARCHAR}, #{goodsInfo,jdbcType=VARCHAR}, #{goodsCoverImg,jdbcType=VARCHAR}, 
+      #{sellingPrice,jdbcType=DECIMAL}, #{goodsCount,jdbcType=INTEGER}, #{goodsTotalPrice,jdbcType=DECIMAL})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.springboot.cloud.entity.MallOrderItem">
+    update mall_order_item
+    set order_id = #{orderId,jdbcType=BIGINT},
+      goods_property_id = #{goodsPropertyId,jdbcType=BIGINT},
+      goods_name = #{goodsName,jdbcType=VARCHAR},
+      goods_info = #{goodsInfo,jdbcType=VARCHAR},
+      goods_cover_img = #{goodsCoverImg,jdbcType=VARCHAR},
+      selling_price = #{sellingPrice,jdbcType=DECIMAL},
+      goods_count = #{goodsCount,jdbcType=INTEGER},
+      goods_total_price = #{goodsTotalPrice,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where order_item_id = #{orderItemId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select order_item_id, order_id, goods_property_id, goods_name, goods_info, goods_cover_img, 
+    selling_price, goods_count, goods_total_price, create_time
+    from mall_order_item
+    where order_item_id = #{orderItemId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select order_item_id, order_id, goods_property_id, goods_name, goods_info, goods_cover_img, 
+    selling_price, goods_count, goods_total_price, create_time
+    from mall_order_item
+  </select>
+
+  <insert id ="insertList" parameterType="java.util.List" >
+
+    insert into mall_order_item (order_item_id, order_id, goods_property_id,
+    goods_name, goods_info, goods_cover_img,
+    selling_price, goods_count, goods_total_price)
+    values
+    <foreach collection ="list" item="item" index= "index" separator =",">
+      (#{item.orderItemId,jdbcType=BIGINT}, #{item.orderId,jdbcType=BIGINT}, #{item.goodsPropertyId,jdbcType=BIGINT},
+      #{item.goodsName,jdbcType=VARCHAR}, #{item.goodsInfo,jdbcType=VARCHAR}, #{item.goodsCoverImg,jdbcType=VARCHAR},
+      #{item.sellingPrice,jdbcType=DECIMAL}, #{item.goodsCount,jdbcType=INTEGER}, #{item.goodsTotalPrice,jdbcType=DECIMAL})
+    </foreach >
+  </insert >
+</mapper>

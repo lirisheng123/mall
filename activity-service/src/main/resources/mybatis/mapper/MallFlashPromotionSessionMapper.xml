@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.cloud.dao.MallFlashPromotionSessionMapper">
+  <resultMap id="BaseResultMap" type="com.springboot.cloud.entity.MallFlashPromotionSession">
+    <id column="mall_flash_promotion_id" jdbcType="BIGINT" property="mallFlashPromotionId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
+    <result column="selling_price" jdbcType="DECIMAL" property="sellingPrice" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="selled_count" jdbcType="INTEGER" property="selledCount" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_flash_promotion_session
+    where mall_flash_promotion_id = #{mallFlashPromotionId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert"  useGeneratedKeys="true" keyProperty="mallFlashPromotionId" parameterType="com.springboot.cloud.entity.MallFlashPromotionSession">
+    insert into mall_flash_promotion_session ( `name`, start_time,
+      end_time,goods_id, selling_price, price,
+      `count`
+      )
+    values (#{name,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP},
+      #{endTime,jdbcType=TIMESTAMP},
+      #{goodsId,jdbcType=BIGINT}, #{sellingPrice,jdbcType=DECIMAL}, #{price,jdbcType=DECIMAL},
+      #{count,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.springboot.cloud.entity.MallFlashPromotionSession">
+    update mall_flash_promotion_session
+    set `name` = #{name,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      `status` = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      goods_id = #{goodsId,jdbcType=BIGINT},
+      selling_price = #{sellingPrice,jdbcType=DECIMAL},
+      price = #{price,jdbcType=DECIMAL},
+      `count` = #{count,jdbcType=INTEGER},
+      selled_count = #{selledCount,jdbcType=INTEGER},
+      sort = #{sort,jdbcType=INTEGER}
+    where mall_flash_promotion_id = #{mallFlashPromotionId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select *
+    from mall_flash_promotion_session
+    where mall_flash_promotion_id = #{mallFlashPromotionId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select *
+    from mall_flash_promotion_session
+  </select>
+
+  <select id="selectList" resultType="com.springboot.cloud.entity.MallFlashPromotionSession">
+    select * from mall_flash_promotion_session
+    WHERE 1
+    <if test="name!=null">
+      AND name like CONCAT('%',#{name},'%')
+    </if>
+    <if test="endTime!=null">
+      AND start_time &gt;=  #{endTime}
+    </if>
+    <if test="nowTime!=null">
+      <!--AND start_time  &lt;= #{nowTime} AND end_time &gt;= #{nowTime}-->
+      AND start_time  &lt;=   #{nowTime} AND end_time &gt;= #{nowTime}
+    </if>
+    <if test="status!=null">
+      AND status  = #{status}
+    </if>
+
+  </select>
+
+  <delete id="deleteList" parameterType="java.util.List">
+    delete from mall_flash_promotion_session
+    where mall_flash_promotion_id IN
+    <!--<foreach collection="list" item="ids"  index="index" open="(" close=")" separator=",">-->
+           <!--#{ids,jdbcType=BIGINT}-->
+    <!--</foreach>-->
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+      #{item,jdbcType=BIGINT}
+    </foreach>
+  </delete>
+</mapper>

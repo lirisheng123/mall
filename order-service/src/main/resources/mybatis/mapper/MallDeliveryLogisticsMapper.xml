@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.cloud.dao.MallDeliveryLogisticsMapper">
+  <resultMap id="BaseResultMap" type="com.springboot.cloud.entity.MallDeliveryLogistics">
+    <id column="delivery_logistics_id" jdbcType="BIGINT" property="deliveryLogisticsId" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="delivery_logistics_no" jdbcType="VARCHAR" property="deliveryLogisticsNo" />
+    <result column="delivery_company_name" jdbcType="VARCHAR" property="deliveryCompanyName" />
+    <result column="company_address_id" jdbcType="BIGINT" property="companyAddressId" />
+    <result column="order_address_id" jdbcType="BIGINT" property="orderAddressId" />
+    <result column="operation_name" jdbcType="VARCHAR" property="operationName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_delivery_logistics
+    where delivery_logistics_id = #{deliveryLogisticsId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.springboot.cloud.entity.MallDeliveryLogistics">
+    insert into mall_delivery_logistics ( order_id, company_address_id,
+      order_address_id, operation_name,delivery_logistics_no,delivery_company_name
+      )
+    values ( #{orderId,jdbcType=BIGINT}, #{companyAddressId,jdbcType=BIGINT},
+      #{orderAddressId,jdbcType=BIGINT}, #{operationName,jdbcType=BIGINT},
+      #{deliveryLogisticsNo,jdbcType=VARCHAR},#{deliveryCompanyName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.springboot.cloud.entity.MallDeliveryLogistics">
+    update mall_delivery_logistics
+    set order_id = #{orderId,jdbcType=BIGINT},
+        delivery_logistics_no=#{deliveryLogisticsNo,jdbcType=VARCHAR},
+        delivery_company_name=#{deliveryCompanyName,jdbcType=VARCHAR},
+      company_address_id = #{companyAddressId,jdbcType=BIGINT},
+      order_address_id = #{orderAddressId,jdbcType=BIGINT},
+      operation_name = #{operationName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where delivery_logistics_id = #{deliveryLogisticsId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select delivery_logistics_id, order_id, company_address_id, order_address_id, operation_name, 
+    create_time,delivery_company_name,delivery_logistics_no
+    from mall_delivery_logistics
+    where delivery_logistics_id = #{deliveryLogisticsId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select delivery_logistics_id, order_id, company_address_id, order_address_id, operation_name, 
+    create_time,delivery_company_name,delivery_logistics_no
+    from mall_delivery_logistics
+  </select>
+</mapper>

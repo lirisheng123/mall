@@ -1,0 +1,12 @@
+From elasticsearch:7.9.0
+
+RUN yum install -y wget unzip \
+    && wget -O elasticsearch.analyze.zip "https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.9.0/elasticsearch-analysis-ik-7.9.0.zip" \
+    && unzip elasticsearch.analyze.zip -d /usr/share/elasticsearch/plugins/ik \
+    && rm elasticsearch.analyze.zip \
+    && yum remove -y wget unzip \
+    && yum clean all
+
+
+
+

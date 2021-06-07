@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.springboot.cloud</groupId>
+    <artifactId>mall</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+
+  <groupId>com.springboot.cloud</groupId>
+  <artifactId>monitor</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>monitor</name>
+  <url>http://maven.apache.org</url>
+
+
+  <dependencies>
+    <!--web服务-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <!--监控的服务端-->
+    <dependency>
+      <groupId>de.codecentric</groupId>
+      <artifactId>spring-boot-admin-starter-server</artifactId>
+      <version>${admin.starter.server.version}</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!--docker镜像build插件-->
+      <!--<plugin>-->
+      <!--<groupId>com.spotify</groupId>-->
+      <!--<artifactId>docker-maven-plugin</artifactId>-->
+      <!--<version>1.2.0</version>-->
+      <!--<configuration>-->
+      <!--&lt;!&ndash; 注意imageName一定要是符合正则[a-z0-9-_.]的，否则构建不会成功 &ndash;&gt;-->
+      <!--<imageName>cike/${project.artifactId}</imageName>-->
+      <!--<dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>-->
+      <!--<rm>true</rm>-->
+      <!--<resources>-->
+      <!--<resource>-->
+      <!--<targetPath>/</targetPath>-->
+      <!--<directory>${project.build.directory}</directory>-->
+      <!--<include>${project.build.finalName}.jar</include>-->
+      <!--</resource>-->
+      <!--</resources>-->
+      <!--</configuration>-->
+      <!--</plugin>-->
+      <plugin>
+        <groupId>com.spotify</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>1.2.0</version>
+        <executions>
+          <execution>
+            <id>build-image</id>
+            <phase>package</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <imageName>cike/${project.artifactId}:${project.version}</imageName>
+          <!--<dockerHost>http://192.168.3.101:2375</dockerHost>-->
+          <baseImage>java:8</baseImage>
+          <entryPoint>["java", "-jar","/${project.build.finalName}.jar"]
+          </entryPoint>
+          <resources>
+            <resource>
+              <targetPath>/</targetPath>
+              <directory>${project.build.directory}</directory>
+              <include>${project.build.finalName}.jar</include>
+            </resource>
+          </resources>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>2.1.4.RELEASE</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>build-info</goal>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

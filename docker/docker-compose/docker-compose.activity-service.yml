@@ -1,0 +1,19 @@
+version: '3'
+services:
+  #活动服务
+  activity-service:
+    image: cike/activity-service:0.0.1-SNAPSHOT
+    container_name: sc-activity-service
+    #restart: always
+    networks:
+      - sc-net
+    ports:
+      - 8086:8086
+    #指定在配置环境中的服务的连接地址
+    env_file: .env
+    environment:
+      TZ: Asia/Shanghai
+
+networks:
+  sc-net:
+    external: false

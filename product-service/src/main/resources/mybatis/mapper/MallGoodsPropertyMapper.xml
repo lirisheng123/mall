@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.cloud.dao.MallGoodsPropertyMapper">
+  <resultMap id="BaseResultMap" type="com.springboot.cloud.entity.MallGoodsProperty">
+    <id column="goods_property_id" jdbcType="BIGINT" property="goodsPropertyId" />
+    <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
+    <result column="goods_property_name" jdbcType="VARCHAR" property="goodsPropertyName" />
+    <result column="goods_property_value" jdbcType="VARCHAR" property="goodsPropertyValue" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="original_price" jdbcType="DECIMAL" property="originalPrice" />
+    <result column="selling_price" jdbcType="DECIMAL" property="sellingPrice" />
+    <result column="stock_num" jdbcType="INTEGER" property="stockNum" />
+    <result column="selled_stock_num" jdbcType="INTEGER" property="selledStockNum" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_goods_property
+    where goods_property_id = #{goodsPropertyId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.springboot.cloud.entity.MallGoodsProperty">
+    insert into mall_goods_property (goods_id, goods_property_name,
+      goods_property_value, create_user,update_user, original_price,
+      selling_price, stock_num, selled_stock_num)
+    values ( #{goodsId,jdbcType=BIGINT}, #{goodsPropertyName,jdbcType=VARCHAR},
+      #{goodsPropertyValue,jdbcType=VARCHAR}, #{createUser,jdbcType=INTEGER},#{updateUser,jdbcType=INTEGER},
+      #{originalPrice,jdbcType=DECIMAL},#{sellingPrice,jdbcType=DECIMAL}, #{stockNum,jdbcType=INTEGER}, #{selledStockNum,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.springboot.cloud.entity.MallGoodsProperty">
+    update mall_goods_property
+    set
+      original_price=#{originalPrice,jdbcType=DECIMAL},
+      selling_price=#{sellingPrice,jdbcType=DECIMAL},
+      stock_num= #{stockNum,jdbcType=INTEGER},
+       selled_stock_num=#{selledStockNum,jdbcType=INTEGER},
+      goods_property_name = #{goodsPropertyName,jdbcType=VARCHAR},
+      goods_property_value = #{goodsPropertyValue,jdbcType=VARCHAR},
+      update_user = #{updateUser,jdbcType=INTEGER}
+
+    where goods_property_id = #{goodsPropertyId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select goods_property_id, goods_id, goods_property_name, goods_property_value, create_user, 
+    create_time, update_user, update_time,original_price, selling_price, stock_num,
+    selled_stock_num
+    from mall_goods_property
+    where goods_property_id = #{goodsPropertyId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select goods_property_id, goods_id, goods_property_name, goods_property_value, create_user, 
+    create_time, update_user, update_time,original_price, selling_price, stock_num,
+    selled_stock_num
+    from mall_goods_property
+  </select>
+  <insert id ="insertAll" parameterType="java.util.List" >
+    <!--<selectKey resultType ="java.lang.Integer" keyProperty= "id"-->
+    <!--order= "AFTER">-->
+    <!--SELECT LAST_INSERT_ID()-->
+    <!--</selectKey >-->
+    insert into mall_goods_property (goods_id, goods_property_name,
+    goods_property_value, create_user,update_user, original_price,
+    selling_price, stock_num, selled_stock_num)
+    values
+    <foreach collection ="list" item="categoryGrand" index= "index" separator =",">
+      (#{categoryGrand.goodsId,jdbcType=BIGINT}, #{categoryGrand.goodsPropertyName,jdbcType=VARCHAR},
+      #{categoryGrand.goodsPropertyValue,jdbcType=VARCHAR},#{categoryGrand.createUser,jdbcType=INTEGER},
+      #{categoryGrand.updateUser,jdbcType=INTEGER},#{categoryGrand.originalPrice,jdbcType=DECIMAL},
+       #{categoryGrand.sellingPrice,jdbcType=DECIMAL},
+        #{categoryGrand.stockNum,jdbcType=INTEGER}, #{categoryGrand.selledStockNum,jdbcType=INTEGER})
+    </foreach >
+  </insert >
+</mapper>

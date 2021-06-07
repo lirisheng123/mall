@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.cloud.dao.MallOrderReturnApplyMapper">
+  <resultMap id="BaseResultMap" type="com.springboot.cloud.entity.MallOrderReturnApply">
+    <id column="order_return_apply_id" jdbcType="BIGINT" property="orderReturnApplyId" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="company_address_id" jdbcType="BIGINT" property="companyAddressId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="return_amount" jdbcType="DECIMAL" property="returnAmount" />
+    <result column="return_name" jdbcType="VARCHAR" property="returnName" />
+    <result column="return_phone" jdbcType="VARCHAR" property="returnPhone" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="handle_time" jdbcType="TIMESTAMP" property="handleTime" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="handle_note" jdbcType="VARCHAR" property="handleNote" />
+    <result column="handle_man" jdbcType="VARCHAR" property="handleMan" />
+    <result column="receive_man" jdbcType="VARCHAR" property="receiveMan" />
+    <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime" />
+    <result column="receive_note" jdbcType="VARCHAR" property="receiveNote" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_order_return_apply
+    where order_return_apply_id = #{orderReturnApplyId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.springboot.cloud.entity.MallOrderReturnApply">
+    insert into mall_order_return_apply ( order_id, company_address_id,
+      return_amount, return_name,
+      return_phone,  reason
+      )
+    values ( #{orderId,jdbcType=BIGINT}, #{companyAddressId,jdbcType=BIGINT},
+      #{returnAmount,jdbcType=DECIMAL}, #{returnName,jdbcType=VARCHAR},
+      #{returnPhone,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.springboot.cloud.entity.MallOrderReturnApply">
+    update mall_order_return_apply
+    set order_id = #{orderId,jdbcType=BIGINT},
+      company_address_id = #{companyAddressId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      return_amount = #{returnAmount,jdbcType=DECIMAL},
+      return_name = #{returnName,jdbcType=VARCHAR},
+      return_phone = #{returnPhone,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=INTEGER},
+      handle_time = #{handleTime,jdbcType=TIMESTAMP},
+      reason = #{reason,jdbcType=VARCHAR},
+      handle_note = #{handleNote,jdbcType=VARCHAR},
+      handle_man = #{handleMan,jdbcType=VARCHAR},
+      receive_man = #{receiveMan,jdbcType=VARCHAR},
+      receive_time = #{receiveTime,jdbcType=TIMESTAMP},
+      receive_note = #{receiveNote,jdbcType=VARCHAR}
+    where order_return_apply_id = #{orderReturnApplyId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select order_return_apply_id, order_id, company_address_id, create_time, return_amount, 
+    return_name, return_phone, `status`, handle_time, reason, handle_note, handle_man, 
+    receive_man, receive_time, receive_note
+    from mall_order_return_apply
+    where order_return_apply_id = #{orderReturnApplyId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select order_return_apply_id, order_id, company_address_id, create_time, return_amount, 
+    return_name, return_phone, `status`, handle_time, reason, handle_note, handle_man, 
+    receive_man, receive_time, receive_note
+    from mall_order_return_apply
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    SELECT
+      *
+    FROM
+    mall_order_return_apply
+    WHERE 1
+    <if test="orderReturnApplyId!=null">
+
+      AND  order_return_apply_id = #{orderReturnApplyId,jdbcType=BIGINT}
+    </if>
+    <if test="status!=null">
+      AND  status =#{status,jdbcType=INTEGER}
+    </if>
+    ORDER  BY  create_time desc
+  </select>
+</mapper>
